@@ -89,6 +89,8 @@
   svnr = svn rebase
   svnd = svn dcommit
   svnl = svn log --oneline --show-commit
+	df = diff HEAD^ HEAD
+	caa = commit -a --amend
 [format]
   pretty = format:%C(blue)%ad%Creset %C(yellow)%h%C(green)%d%Creset %C(blue)%s %C(magenta) [%an]%Creset
 [mergetool]
@@ -126,5 +128,5 @@
 [include]
   path = .gitconfig.user
 [user]
-	email = jiefeng.hopkins@gmail.com
+	email = j@rallets.com
 	name = Jie Feng

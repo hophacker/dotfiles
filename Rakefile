@@ -2,6 +2,8 @@ require 'rake'
 require 'fileutils'
 require File.join(File.dirname(__FILE__), 'bin', 'yadr', 'vundle')
 
+# TODO install for vim_instant_markdown
+
 desc "Hook our dotfiles into system-standard positions."
 task :install => [:submodule_init, :submodules] do
   puts
@@ -25,6 +27,8 @@ task :install => [:submodule_init, :submodules] do
     Rake::Task["install_vundle"].execute
   end
 
+  Rake::Task["install_ycm"].execute
+
   Rake::Task["install_prezto"].execute
 
   install_fonts
@@ -42,12 +46,32 @@ task :install_prezto do
   end
 end
 
+task :install_ycm do
+  if want_to_install?('YouCompleteMe')
+    run %{
+      sudo apt install cmake -y
+      cd $HOME/.vim/bundle/YouCompleteMe/
+      ./install.py
+    }
+  end
+end
+
 desc 'Updates the installation'
 task :update do
   Rake::Task["vundle_migration"].execute if needs_migration_to_vundle?
   Rake::Task["install"].execute
   #TODO: for now, we do the same as install. But it would be nice
   #not to clobber zsh files
+end
+
+task :sync do
+  vundle_path = File.join('vim','bundle', 'vundle')
+  unless File.exists?(vundle_path)
+    run %{
+      cd $HOME/.yadr
+      git clone https://github.com/gmarik/vundle.git #{vundle_path}
+    }
+  end
 end
 
 task :submodule_init do
